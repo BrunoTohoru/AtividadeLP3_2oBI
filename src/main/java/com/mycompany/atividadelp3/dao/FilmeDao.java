@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,22 +52,93 @@ public class FilmeDao implements Dao<Integer, Filme>{
 
     @Override
     public Filme retrieve(Integer pk) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Filme filme = null;
+        String sql = "SELECT * FROM filme WHERE id = ?";
+        
+        try {
+            PreparedStatement query = con.prepareStatement(sql);
+            query.setInt(1, pk);
+            ResultSet rs = query.executeQuery();
+            
+            if (rs.next()) {
+                EstiloDao daoEstilo = new EstiloDao(con);
+                filme = new Filme();
+                filme.setId(rs.getInt("id"));
+                filme.setNome(rs.getString("nome"));
+                filme.setAno(rs.getString("ano"));
+                filme.setDuracao(rs.getInt("duracao"));
+                filme.setFoto(rs.getString("foto"));
+                filme.setSinopse(rs.getString("sinopse"));
+                filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id")));
+            }
+            query.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return filme;
     }
 
     @Override
     public void update(Filme entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "UPDATE filme SET nome = ?, ano = ?, duracao = ?, foto = ?, sinopse = ?, estilo_id = ? WHERE id = ?";
+        try {
+            EstiloDao daoEstilo = new EstiloDao(con);
+            if(entity.getEstilo().getId() <= 0){
+                daoEstilo.create(entity.getEstilo());
+            }
+            PreparedStatement query = con.prepareStatement(sql);
+            query.setString(1, entity.getNome());
+            query.setString(2, entity.getAno());
+            query.setInt(3, entity.getDuracao());
+            query.setString(4, entity.getFoto());
+            query.setString(5, entity.getSinopse());
+            query.setInt(6, entity.getEstilo().getId());
+            query.executeUpdate();
+            query.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public void delete(Integer pk) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "DELETE FROM filme WHERE id = ?";
+        try {
+            PreparedStatement query = con.prepareStatement(sql);
+            query.setInt(1, pk);
+            query.executeUpdate();
+            query.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public List<Filme> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Filme> filmes = new LinkedList<Filme>();
+        
+        try {
+            String sql = "SELECT * FROM filme";
+            PreparedStatement query = con.prepareStatement(sql);
+            ResultSet rs = query.executeQuery();
+            
+            while (rs.next()) {
+                EstiloDao daoEstilo = new EstiloDao(con);
+                Filme filme = new Filme();
+                filme.setId(rs.getInt("id"));
+                filme.setNome(rs.getString("nome"));
+                filme.setAno(rs.getString("ano"));
+                filme.setDuracao(rs.getInt("duracao"));
+                filme.setFoto(rs.getString("foto"));
+                filme.setSinopse(rs.getString("sinopse"));
+                filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id")));
+                
+                filmes.add(filme);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return filmes;
     }
     
 }
