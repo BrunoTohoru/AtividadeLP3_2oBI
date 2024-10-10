@@ -12,10 +12,10 @@ CREATE TABLE IF NOT EXISTS filme (
     id INT NOT NULL AUTO_INCREMENT,
     estilo_id INT NOT NULL,
     nome VARCHAR(100) NOT NULL DEFAULT "Não informado.",
-    ano VARCHAR(4) NOT NULL,
+    ano VARCHAR(4) NOT NULL DEFAULT "N/A",
     duracao INT NOT NULL DEFAULT 0,
-    foto VARCHAR(50) NOT NULL DEFAULT "Caminho do arquivo não informado",
-    sinopse VARCHAR(100),
+    foto VARCHAR(200) NOT NULL DEFAULT "Caminho do arquivo não informado",
+    sinopse VARCHAR(500),
     PRIMARY KEY (id),
     FOREIGN KEY (estilo_id) REFERENCES estilo(id)
 );
