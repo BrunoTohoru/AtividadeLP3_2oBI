@@ -4,23 +4,77 @@
  */
 package com.mycompany.atividadelp3.view;
 
+import com.mycompany.atividadelp3.bean.Filme;
+import com.mycompany.atividadelp3.dao.EstiloDao;
+import com.mycompany.atividadelp3.dao.FilmeDao;
+import com.mycompany.atividadelp3.util.ConnectionFactory;
+import com.mycompany.atividadelp3.view.model.EstiloComboModel;
+import com.mycompany.atividadelp3.view.model.FilmeTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.sql.Connection;
+import javax.swing.ComboBoxModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Aluno
  */
 public class FilmeCadastrar extends javax.swing.JFrame {
-
+    private Connection con = ConnectionFactory.createConnectionToMySQL();
+    private FilmeTableModel tbm;
+    private EstiloComboModel cbm;
+    private Filme filmeSelecionado = null;
+    private String filePath = null;
     /**
      * Creates new form FilmeCadastrar
      */
     public FilmeCadastrar() {
-        JFileChooser fcFoto = new JFileChooser("C:\\Users\\Aluno\\Documents\\NetBeansProjects\\AtividadeLP3_2oBI\\src\\main\\java\\com\\mycompany\\atividadelp3\\util\\fotos");
-        this.add(fcFoto);
         initComponents();
+        tbm = new FilmeTableModel();
+        tblFilme.setModel(tbm);
+        cbm = new EstiloComboModel();
+        cbEstilo.setModel(cbm);
+        
+        popula();
+        tblFilme.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = tblFilme.getSelectedRow();
+                filmeSelecionado = tbm.get(linha);
+                populaForm(filmeSelecionado);
+            }
+            
+        });
     }
-
+    
+    private void populaForm(Filme filme){
+        tfID.setText(String.valueOf(filme.getId()));
+        tfNome.setText(filme.getNome());
+        tfAno.setText(filme.getAno());
+        tfDuracao.setText(filme.getDuracao().toString());
+        tfFoto.setText(filePath);
+        cbm.setSelectedItem(filme.getEstilo());
+    }
+    
+    private void popula () {
+        FilmeDao dao = new FilmeDao(con);
+        tbm.addList(dao.findAll());
+        EstiloDao daoEstilo = new EstiloDao(con);
+        cbm.addAll(daoEstilo.findAll());
+    }
+    
+    private void limpaTela() {
+        tfID.setText("");
+        tfNome.setText("");
+        tfAno.setText("");
+        tfDuracao.setText("");
+        tfFoto.setText("");
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,27 +84,83 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        tfID = new javax.swing.JTextField();
+        lblNome = new javax.swing.JLabel();
+        tfNome = new javax.swing.JTextField();
+        lblAno = new javax.swing.JLabel();
+        tfAno = new javax.swing.JTextField();
+        lblDuracao = new javax.swing.JLabel();
+        tfDuracao = new javax.swing.JTextField();
+        lblFoto = new javax.swing.JLabel();
+        tfFoto = new javax.swing.JTextField();
+        btnProcurarFoto = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblFilme = new javax.swing.JTable();
+        lblEstilo = new javax.swing.JLabel();
+        cbEstilo = new javax.swing.JComboBox<>();
+        btnExcluir = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("ID");
+        lblID.setText("ID");
 
-        jLabel2.setText("Nome");
+        tfID.setEditable(false);
 
-        jLabel3.setText("Ano");
+        lblNome.setText("Nome");
 
-        jLabel4.setText("Duração (horas)");
+        lblAno.setText("Ano");
 
-        jLabel5.setText("Foto");
+        lblDuracao.setText("Duração (horas)");
+
+        lblFoto.setText("Foto");
+
+        btnProcurarFoto.setText("Procurar");
+        btnProcurarFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcurarFotoActionPerformed(evt);
+            }
+        });
+
+        tblFilme.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblFilme);
+
+        lblEstilo.setText("Estilo");
+
+        cbEstilo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,25 +169,40 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblID)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(lblNome)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2))
+                        .addComponent(tfNome))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(lblFoto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfFoto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
+                        .addComponent(btnProcurarFoto))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblAno)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfAno, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addGap(0, 124, Short.MAX_VALUE)))
+                        .addComponent(lblDuracao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblEstilo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbEstilo, 0, 114, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluir)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -85,22 +210,97 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblID)
+                    .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNome)
+                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addContainerGap(244, Short.MAX_VALUE))
+                    .addComponent(lblAno)
+                    .addComponent(tfAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDuracao)
+                    .addComponent(tfDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEstilo)
+                    .addComponent(cbEstilo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFoto)
+                    .addComponent(tfFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProcurarFoto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnCadastrar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnProcurarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcurarFotoActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.setDialogTitle("Seletor de foto");
+        fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG)","png","jpg","jpeg"));
+        fc.showOpenDialog(this);
+        File f = fc.getSelectedFile();
+        filePath = f.getPath();
+        tfFoto.setText(f.getPath());
+        
+        //terminar a implementação
+    }//GEN-LAST:event_btnProcurarFotoActionPerformed
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        Filme filme = new Filme();
+        filme.setNome(tfNome.getText());
+        filme.setAno(tfAno.getText());
+        filme.setDuracao(Integer.parseInt(tfDuracao.getText()));
+        if (filePath.isBlank()) {
+            filePath = "Foto não anexada.";
+        }
+        filme.setFoto(filePath);
+        filme.setEstilo(cbm.getSelectedItem());
+        
+        FilmeDao dao = new FilmeDao(con);
+        dao.create(filme);
+        
+        tbm.add(filme);
+        tbm.fireTableDataChanged();
+        
+        filePath = null;
+        limpaTela();
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (filmeSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um filme na tabela");
+        } else {
+            filmeSelecionado.setNome(tfNome.getText());
+            filmeSelecionado.setEstilo(cbm.getSelectedItem());
+            filmeSelecionado.setAno(tfAno.getText());
+            filmeSelecionado.setDuracao(Integer.parseInt(tfDuracao.getText()));
+            filmeSelecionado.setFoto(filePath);
+            
+            FilmeDao dao = new FilmeDao(con);
+            dao.update(filmeSelecionado);
+            tbm.fireTableDataChanged();
+            limpaTela();
+            filmeSelecionado = null;
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        Filme filmeSelecionado = tbm.get(tblFilme.getSelectedRow());
+        FilmeDao dao = new FilmeDao(con);
+        dao.delete(filmeSelecionado.getId());
+        System.out.println(filmeSelecionado);
+        tbm.remove(filmeSelecionado);
+        limpaTela();
+        filmeSelecionado = null;
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,14 +338,23 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnProcurarFoto;
+    private javax.swing.JComboBox<String> cbEstilo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAno;
+    private javax.swing.JLabel lblDuracao;
+    private javax.swing.JLabel lblEstilo;
+    private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblNome;
+    private javax.swing.JTable tblFilme;
+    private javax.swing.JTextField tfAno;
+    private javax.swing.JTextField tfDuracao;
+    private javax.swing.JTextField tfFoto;
+    private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfNome;
     // End of variables declaration//GEN-END:variables
 }

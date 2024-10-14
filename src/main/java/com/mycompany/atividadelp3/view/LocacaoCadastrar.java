@@ -4,12 +4,20 @@
  */
 package com.mycompany.atividadelp3.view;
 
+import com.mycompany.atividadelp3.bean.Locacao;
+import com.mycompany.atividadelp3.view.model.ClienteComboModel;
+import com.mycompany.atividadelp3.view.model.FilmeComboModel;
+import com.mycompany.atividadelp3.view.model.LocacaoTableModel;
+
 /**
  *
  * @author Aluno
  */
 public class LocacaoCadastrar extends javax.swing.JFrame {
-
+    private LocacaoTableModel tbm;
+    private FilmeComboModel cbmFilme;
+    private ClienteComboModel cbmCliente;
+    private Locacao locacaoSelecionado = null;
     /**
      * Creates new form LocacaoCadastrar
      */
@@ -26,17 +34,149 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        tfID = new javax.swing.JTextField();
+        lblFilme = new javax.swing.JLabel();
+        cbFilme = new javax.swing.JComboBox<>();
+        lblCliente = new javax.swing.JLabel();
+        cbCliente = new javax.swing.JComboBox<>();
+        btnAddFilme = new javax.swing.JButton();
+        btnAddCliente = new javax.swing.JButton();
+        lblEmissao = new javax.swing.JLabel();
+        ftfEmissao = new javax.swing.JFormattedTextField();
+        lblDevolucao = new javax.swing.JLabel();
+        ftfDevolucao = new javax.swing.JFormattedTextField();
+        lblValor = new javax.swing.JLabel();
+        tfValor = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblLocacao = new javax.swing.JTable();
+        btnExcluir = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("ID");
+
+        tfID.setEditable(false);
+
+        lblFilme.setText("Filme");
+
+        cbFilme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblCliente.setText("Cliente");
+
+        cbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnAddFilme.setText("...");
+
+        btnAddCliente.setText("...");
+
+        lblEmissao.setText("Emissão");
+
+        lblDevolucao.setText("Devolução");
+
+        lblValor.setText("Valor");
+
+        tblLocacao.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblLocacao);
+
+        btnExcluir.setText("Excluir");
+
+        btnEditar.setText("Editar");
+
+        btnCadastrar.setText("Cadastrar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblFilme)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbFilme, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAddFilme))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCliente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAddCliente))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEmissao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfEmissao, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDevolucao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblValor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfValor, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluir)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFilme)
+                    .addComponent(cbFilme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddFilme))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCliente)
+                    .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddCliente))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEmissao)
+                    .addComponent(ftfEmissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDevolucao)
+                    .addComponent(ftfDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblValor)
+                    .addComponent(tfValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnCadastrar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -78,5 +218,24 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddCliente;
+    private javax.swing.JButton btnAddFilme;
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JComboBox<String> cbCliente;
+    private javax.swing.JComboBox<String> cbFilme;
+    private javax.swing.JFormattedTextField ftfDevolucao;
+    private javax.swing.JFormattedTextField ftfEmissao;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblDevolucao;
+    private javax.swing.JLabel lblEmissao;
+    private javax.swing.JLabel lblFilme;
+    private javax.swing.JLabel lblValor;
+    private javax.swing.JTable tblLocacao;
+    private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfValor;
     // End of variables declaration//GEN-END:variables
 }

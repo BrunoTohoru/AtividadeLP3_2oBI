@@ -4,17 +4,55 @@
  */
 package com.mycompany.atividadelp3.view;
 
+import com.mycompany.atividadelp3.bean.Estilo;
+import com.mycompany.atividadelp3.dao.EstiloDao;
+import com.mycompany.atividadelp3.util.ConnectionFactory;
+import com.mycompany.atividadelp3.view.model.EstiloTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Aluno
  */
 public class EstiloCadastrar extends javax.swing.JFrame {
-
+    private Connection con = ConnectionFactory.createConnectionToMySQL();
+    private EstiloTableModel tbm;
+    private Estilo estiloSelecionado = null;
     /**
      * Creates new form EstiloCadastrar
      */
     public EstiloCadastrar() {
         initComponents();
+        tbm = new EstiloTableModel();
+        tblEstilo.setModel(tbm);
+        
+        popula();
+        
+        tblEstilo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = tblEstilo.getSelectedRow();
+                estiloSelecionado = tbm.get(linha);
+                populaForm(estiloSelecionado);
+            }
+        });
+    }
+    private void popula() {
+        EstiloDao dao = new EstiloDao(con);
+        tbm.addList(dao.findAll());
+    }
+    
+    private void populaForm(Estilo estilo){
+        tfID.setText(String.valueOf(estilo.getId()));
+        tfNome.setText(estilo.getNome());
+    }
+    
+    private void limpaTela() {
+        tfID.setText("");
+        tfNome.setText("");
     }
 
     /**
@@ -26,29 +64,46 @@ public class EstiloCadastrar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        lblID = new javax.swing.JLabel();
+        tfID = new javax.swing.JTextField();
+        lblNome = new javax.swing.JLabel();
+        tfNome = new javax.swing.JTextField();
+        btnExcluir = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblEstilo = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("ID");
+        lblID.setText("ID");
 
-        jLabel2.setText("Nome");
+        tfID.setEditable(false);
 
-        jButton1.setText("Excluir");
+        lblNome.setText("Nome");
 
-        jButton2.setText("Editar");
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Cadastrar");
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
+
+        tblEstilo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -59,7 +114,7 @@ public class EstiloCadastrar extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblEstilo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,20 +125,20 @@ public class EstiloCadastrar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblID)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(lblNome)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2))
+                        .addComponent(tfNome))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 152, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnCadastrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnExcluir)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -91,15 +146,15 @@ public class EstiloCadastrar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblID)
+                    .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNome)
+                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnCadastrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                 .addContainerGap())
@@ -107,6 +162,42 @@ public class EstiloCadastrar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        Estilo estilo = new Estilo();
+        estilo.setNome(tfNome.getText());        
+        EstiloDao dao = new EstiloDao(con);
+        dao.create(estilo);
+        
+        tbm.add(estilo);
+        tbm.fireTableDataChanged();
+        
+        limpaTela();
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (estiloSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um estilo na tabela.");
+        }else{
+            estiloSelecionado.setNome(tfNome.getText());
+   
+            EstiloDao dao = new EstiloDao(con);
+            dao.update(estiloSelecionado);
+            tbm.fireTableDataChanged();
+            limpaTela();
+            estiloSelecionado = null;
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        estiloSelecionado = tbm.get(tblEstilo.getSelectedRow());
+        EstiloDao dao = new EstiloDao(con);
+        dao.delete(estiloSelecionado.getId());
+        System.out.println(estiloSelecionado);
+        tbm.remove(estiloSelecionado);
+        limpaTela();
+        estiloSelecionado = null;
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -144,14 +235,14 @@ public class EstiloCadastrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblNome;
+    private javax.swing.JTable tblEstilo;
+    private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfNome;
     // End of variables declaration//GEN-END:variables
 }

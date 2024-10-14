@@ -4,29 +4,29 @@
  */
 package com.mycompany.atividadelp3.view.model;
 
-import com.mycompany.atividadelp3.bean.Filme;
+import com.mycompany.atividadelp3.bean.Cliente;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 
 /**
  *
- * @author Aluno
+ * @author Bruno
  */
-public class FilmeComboModel extends DefaultComboBoxModel<Filme>{
-    public FilmeComboModel(Vector<Filme> items) {
+public class ClienteComboModel extends DefaultComboBoxModel<Cliente>{
+    public ClienteComboModel(Vector<Cliente> items) {
         super(items);
     }
 
-    public FilmeComboModel() {
+    public ClienteComboModel() {
     }
     
-    public void setSelectedItem(Filme estilo) {
+    public void setSelectedItem(Cliente cliente) {
         
         int numElemCB = getSize();
         for (int i = 0; i < numElemCB; i++) {
-            Filme filmeCB = getElementAt(i);
-            if (filmeCB.getId() == estilo.getId()) {
-                super.setSelectedItem(filmeCB);
+            Cliente clienteCB = getElementAt(i);
+            if (clienteCB.getId() == cliente.getId()) {
+                super.setSelectedItem(clienteCB);
             }
         }        
     }
@@ -34,7 +34,7 @@ public class FilmeComboModel extends DefaultComboBoxModel<Filme>{
     
     
     @Override
-    public Filme getSelectedItem() {
-        return (Filme) super.getSelectedItem();
+    public Cliente getSelectedItem() {
+        return (Cliente) super.getSelectedItem();
     }
 }
