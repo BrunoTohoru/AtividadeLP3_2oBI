@@ -13,34 +13,35 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Aluno
  */
-public class FilmeTableModel extends AbstractTableModel{
+public class FilmeTableModel extends AbstractTableModel {
+
     private List<Filme> dados = new LinkedList<Filme>();
     private String[] colunas = {"ID", "Estilo", "Nome", "Ano", "Duração", "Detalhes"};
 
-    public Filme get(int linha){
+    public Filme get(int linha) {
         return dados.get(linha);
     }
-    
+
     public void add(Filme f) {
         this.dados.add(f);
         this.fireTableDataChanged();
     }
-    
+
     public void addList(List<Filme> filmes) {
         this.dados = filmes;
         this.fireTableDataChanged();
     }
-    
+
     public void remove(Filme f) {
         this.dados.remove(f);
         this.fireTableDataChanged();
     }
-    
+
     @Override
     public String getColumnName(int coluna) {
         return colunas[coluna];
     }
-    
+
     @Override
     public int getRowCount() {
         return dados.size();
@@ -54,7 +55,7 @@ public class FilmeTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int linha, int coluna) {
         Filme filme = dados.get(linha);
-        
+
         switch (coluna) {
             case 0:
                 return filme.getId();

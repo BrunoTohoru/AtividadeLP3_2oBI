@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ClienteDao implements Dao<Integer, Cliente> {
+
     protected Connection con;
 
     public ClienteDao(Connection con) {
@@ -19,23 +20,23 @@ public class ClienteDao implements Dao<Integer, Cliente> {
     @Override
     public void create(Cliente entity) {
         String sql = "INSERT INTO cliente(nome, endereco, telefone) VALUES (?, ?, ?)";
-        
-        try{
+
+        try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getNome());
             query.setString(2, entity.getEndereco());
             query.setString(3, entity.getTelefone());
             query.executeUpdate();
-            
+
             ResultSet rs = query.getGeneratedKeys();
-            
+
             if (rs.next()) {
                 int id = rs.getInt(1);
                 entity.setId(id);
             }
             query.close();
-            
-        }catch(SQLException e){
+
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -43,15 +44,15 @@ public class ClienteDao implements Dao<Integer, Cliente> {
     @Override
     public Cliente retrieve(Integer pk) {
         Cliente cliente = null;
-        
+
         if (pk != null) {
             String sql = "SELECT id, nome, endereco, telefone FROM cliente WHERE id = ?";
-            
-            try{
+
+            try {
                 PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 query.setInt(1, pk);
                 ResultSet rs = query.executeQuery();
-                
+
                 if (rs.next()) {
                     cliente = new Cliente();
                     cliente.setId(rs.getInt("id"));
@@ -60,10 +61,10 @@ public class ClienteDao implements Dao<Integer, Cliente> {
                     cliente.setTelefone(rs.getString("telefone"));
                 }
                 query.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            
+
         }
         return cliente;
     }
@@ -71,14 +72,14 @@ public class ClienteDao implements Dao<Integer, Cliente> {
     @Override
     public void update(Cliente entity) {
         String sql = "UPDATE cliente SET nome = ?, endereco = ?, telefone = ? WHERE id = ?";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getNome());
             query.setString(2, entity.getEndereco());
             query.setString(3, entity.getTelefone());
             int rowsUpdated = query.executeUpdate();
-            
+
             query.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -88,7 +89,7 @@ public class ClienteDao implements Dao<Integer, Cliente> {
     @Override
     public void delete(Integer pk) {
         String sql = "DELETE FROM cliente WHERE id = ?";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setInt(1, pk);
@@ -102,27 +103,27 @@ public class ClienteDao implements Dao<Integer, Cliente> {
     public List<Cliente> findAll() {
         List<Cliente> clientes = new LinkedList<Cliente>();
         String sql = "SELECT id, nome, endereco, telefone FROM cliente";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));
                 cliente.setNome(rs.getString("nome"));
                 cliente.setEndereco(rs.getString("endereco"));
                 cliente.setTelefone(rs.getString("telefone"));
-                
+
                 clientes.add(cliente);
             }
-            
+
             query.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
+
         return clientes;
     }
-    
+
 }

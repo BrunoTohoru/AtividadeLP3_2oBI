@@ -1,6 +1,7 @@
 package com.mycompany.atividadelp3.bean;
 
 public class Filme {
+
     private Integer id;
     private String nome;
     private String ano;
@@ -69,5 +70,5 @@ public class Filme {
     public String toString() {
         return nome.toUpperCase();
     }
-    
+
 }

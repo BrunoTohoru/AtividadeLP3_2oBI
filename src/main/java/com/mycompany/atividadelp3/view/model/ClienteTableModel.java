@@ -13,34 +13,35 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Aluno
  */
-public class ClienteTableModel extends AbstractTableModel{
+public class ClienteTableModel extends AbstractTableModel {
+
     private List<Cliente> dados = new LinkedList<Cliente>();
     private String[] colunas = {"ID", "Nome", "Endereço", "Telefone"};
 
-    public Cliente get(int linha){
+    public Cliente get(int linha) {
         return dados.get(linha);
     }
-    
-    public void add(Cliente c){
+
+    public void add(Cliente c) {
         this.dados.add(c);
         this.fireTableDataChanged();
     }
-    
-    public void addList(List<Cliente> clientes){
+
+    public void addList(List<Cliente> clientes) {
         this.dados = clientes;
         this.fireTableDataChanged();
     }
-    
-    public void remove(Cliente c){
+
+    public void remove(Cliente c) {
         this.dados.remove(c);
         this.fireTableDataChanged();
     }
-    
+
     @Override
     public String getColumnName(int coluna) {
         return colunas[coluna];
     }
-    
+
     @Override
     public int getRowCount() {
         return dados.size();
@@ -54,7 +55,7 @@ public class ClienteTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int linha, int coluna) {
         Cliente cliente = dados.get(linha);
-        
+
         switch (coluna) {
             case 0:
                 return cliente.getId();

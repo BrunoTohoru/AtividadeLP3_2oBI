@@ -13,34 +13,35 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Aluno
  */
-public class EstiloTableModel extends AbstractTableModel{
+public class EstiloTableModel extends AbstractTableModel {
+
     private List<Estilo> dados = new LinkedList<Estilo>();
     private String[] colunas = {"ID", "Nome"};
 
-    public Estilo get(int linha){
+    public Estilo get(int linha) {
         return dados.get(linha);
     }
-    
-    public void add(Estilo e){
+
+    public void add(Estilo e) {
         this.dados.add(e);
         this.fireTableDataChanged();
     }
-    
-    public void addList(List<Estilo> estilos){
+
+    public void addList(List<Estilo> estilos) {
         this.dados = estilos;
         this.fireTableDataChanged();
     }
-    
-    public void remove(Estilo e){
+
+    public void remove(Estilo e) {
         this.dados.remove(e);
         this.fireTableDataChanged();
     }
-    
+
     @Override
-    public String getColumnName(int coluna){
+    public String getColumnName(int coluna) {
         return this.colunas[coluna];
     }
-    
+
     @Override
     public int getRowCount() {
         return dados.size();
@@ -63,6 +64,5 @@ public class EstiloTableModel extends AbstractTableModel{
                 return null;
         }
     }
-    
-    
+
 }

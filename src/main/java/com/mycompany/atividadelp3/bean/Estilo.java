@@ -1,6 +1,7 @@
 package com.mycompany.atividadelp3.bean;
 
 public class Estilo {
+
     private Integer id;
     private String nome;
 
@@ -24,5 +25,5 @@ public class Estilo {
     public String toString() {
         return nome.toUpperCase();
     }
-    
+
 }

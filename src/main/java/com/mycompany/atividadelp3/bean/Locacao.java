@@ -3,6 +3,7 @@ package com.mycompany.atividadelp3.bean;
 import java.util.Date;
 
 public class Locacao {
+
     private Integer id;
     private Date emissao;
     private Date devolucao;
@@ -62,5 +63,5 @@ public class Locacao {
     public String toString() {
         return "Locacao Nº: " + id + ", " + filme.toString() + ", " + cliente.toString();
     }
-    
+
 }

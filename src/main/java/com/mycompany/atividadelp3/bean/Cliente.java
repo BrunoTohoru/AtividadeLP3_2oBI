@@ -1,6 +1,7 @@
 package com.mycompany.atividadelp3.bean;
 
 public class Cliente {
+
     private Integer id;
     private String nome;
     private String endereco;

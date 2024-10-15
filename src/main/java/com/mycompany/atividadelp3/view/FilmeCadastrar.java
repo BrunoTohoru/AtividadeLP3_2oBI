@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.Connection;
-import javax.swing.ComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,11 +23,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Aluno
  */
 public class FilmeCadastrar extends javax.swing.JFrame {
+
     private Connection con = ConnectionFactory.createConnectionToMySQL();
     private FilmeTableModel tbm;
     private EstiloComboModel cbm;
     private Filme filmeSelecionado = null;
     private String filePath = null;
+
     /**
      * Creates new form FilmeCadastrar
      */
@@ -38,7 +39,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tblFilme.setModel(tbm);
         cbm = new EstiloComboModel();
         cbEstilo.setModel(cbm);
-        
+
         popula();
         tblFilme.addMouseListener(new MouseAdapter() {
             @Override
@@ -47,11 +48,11 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                 filmeSelecionado = tbm.get(linha);
                 populaForm(filmeSelecionado);
             }
-            
+
         });
     }
-    
-    private void populaForm(Filme filme){
+
+    private void populaForm(Filme filme) {
         tfID.setText(String.valueOf(filme.getId()));
         tfNome.setText(filme.getNome());
         tfAno.setText(filme.getAno());
@@ -59,22 +60,23 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfFoto.setText(filePath);
         cbm.setSelectedItem(filme.getEstilo());
     }
-    
-    private void popula () {
+
+    private void popula() {
         FilmeDao dao = new FilmeDao(con);
         tbm.addList(dao.findAll());
         EstiloDao daoEstilo = new EstiloDao(con);
         cbm.addAll(daoEstilo.findAll());
     }
-    
+
     private void limpaTela() {
         tfID.setText("");
         tfNome.setText("");
         tfAno.setText("");
         tfDuracao.setText("");
         tfFoto.setText("");
+        cbEstilo.setSelectedItem(-1);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -244,12 +246,12 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.setDialogTitle("Seletor de foto");
-        fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG)","png","jpg","jpeg"));
+        fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG)", "png", "jpg", "jpeg"));
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
         filePath = f.getPath();
         tfFoto.setText(f.getPath());
-        
+
         //terminar a implementação
     }//GEN-LAST:event_btnProcurarFotoActionPerformed
 
@@ -263,13 +265,13 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         }
         filme.setFoto(filePath);
         filme.setEstilo(cbm.getSelectedItem());
-        
+
         FilmeDao dao = new FilmeDao(con);
         dao.create(filme);
-        
+
         tbm.add(filme);
         tbm.fireTableDataChanged();
-        
+
         filePath = null;
         limpaTela();
     }//GEN-LAST:event_btnCadastrarActionPerformed
@@ -283,7 +285,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             filmeSelecionado.setAno(tfAno.getText());
             filmeSelecionado.setDuracao(Integer.parseInt(tfDuracao.getText()));
             filmeSelecionado.setFoto(filePath);
-            
+
             FilmeDao dao = new FilmeDao(con);
             dao.update(filmeSelecionado);
             tbm.fireTableDataChanged();

@@ -18,9 +18,11 @@ import javax.swing.JOptionPane;
  * @author Aluno
  */
 public class ClienteCadastrar extends javax.swing.JFrame {
+
     private Connection con = ConnectionFactory.createConnectionToMySQL();
     private ClienteTableModel tbm;
     private Cliente clienteSelecionado = null;
+
     /**
      * Creates new form ClienteCadastrar
      */
@@ -28,9 +30,9 @@ public class ClienteCadastrar extends javax.swing.JFrame {
         initComponents();
         tbm = new ClienteTableModel();
         tblCliente.setModel(tbm);
-        
+
         popula();
-        
+
         tblCliente.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -38,26 +40,26 @@ public class ClienteCadastrar extends javax.swing.JFrame {
                 clienteSelecionado = tbm.get(linha);
                 populaForm(clienteSelecionado);
             }
-            
+
         });
     }
-    
-    private void populaForm(Cliente cliente){
+
+    private void populaForm(Cliente cliente) {
         tfID.setText(String.valueOf(cliente.getId()));
         tfNome.setText(cliente.getNome());
         tfEndereco.setText(cliente.getEndereco());
         tfTelefone.setText(cliente.getTelefone());
-        
+
     }
-    
-    private void popula () {
+
+    private void popula() {
         Connection con = ConnectionFactory.createConnectionToMySQL();
-        
+
         ClienteDao dao = new ClienteDao(con);
         tbm.addList(dao.findAll());
-        
+
     }
-    
+
     private void limpaTela() {
         tfID.setText("");
         tfNome.setText("");
@@ -202,24 +204,24 @@ public class ClienteCadastrar extends javax.swing.JFrame {
         cliente.setNome(tfNome.getText());
         cliente.setEndereco(tfEndereco.getText());
         cliente.setTelefone(tfTelefone.getText());
-        
+
         ClienteDao dao = new ClienteDao(con);
         dao.create(cliente);
-        
+
         tbm.add(cliente);
         tbm.fireTableDataChanged();
-        
+
         limpaTela();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (clienteSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Selecione um cliente na tabela.");
-        }else{
+        } else {
             clienteSelecionado.setNome(tfNome.getText());
             clienteSelecionado.setEndereco(tfEndereco.getText());
             clienteSelecionado.setTelefone(tfTelefone.getText());
-   
+
             ClienteDao dao = new ClienteDao(con);
             dao.update(clienteSelecionado);
             tbm.fireTableDataChanged();

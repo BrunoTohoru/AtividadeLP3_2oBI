@@ -18,7 +18,8 @@ import java.util.List;
  *
  * @author Aluno
  */
-public class LocacaoDao implements Dao<Integer, Locacao>{
+public class LocacaoDao implements Dao<Integer, Locacao> {
+
     protected Connection con;
 
     public LocacaoDao(Connection con) {
@@ -35,12 +36,12 @@ public class LocacaoDao implements Dao<Integer, Locacao>{
             query.setDouble(3, entity.getValor());
             query.setInt(4, entity.getFilme().getId());
             query.setInt(5, entity.getCliente().getId());
-            
+
             query.executeUpdate();
-            
+
             ResultSet rs = query.getGeneratedKeys();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 int id = rs.getInt("id");
                 entity.setId(id);
             }
@@ -108,14 +109,14 @@ public class LocacaoDao implements Dao<Integer, Locacao>{
     @Override
     public List<Locacao> findAll() {
         List<Locacao> locacoes = new LinkedList<Locacao>();
-        
+
         String sql = "SELECT * FROM locacao";
         try {
             FilmeDao daoFilme = new FilmeDao(con);
             ClienteDao daoCliente = new ClienteDao(con);
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
-            while (rs.next()) {                
+            while (rs.next()) {
                 Locacao locacao = new Locacao();
                 locacao.setId(rs.getInt("id"));
                 locacao.setEmissao(rs.getDate("emissao"));
@@ -123,7 +124,7 @@ public class LocacaoDao implements Dao<Integer, Locacao>{
                 locacao.setValor(rs.getDouble("valor"));
                 locacao.setFilme(daoFilme.retrieve(rs.getInt("filme_id")));
                 locacao.setCliente(daoCliente.retrieve(rs.getInt("cliente_id")));
-                
+
                 locacoes.add(locacao);
             }
             query.close();
@@ -132,5 +133,5 @@ public class LocacaoDao implements Dao<Integer, Locacao>{
         }
         return locacoes;
     }
-    
+
 }

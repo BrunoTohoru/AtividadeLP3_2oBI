@@ -12,27 +12,26 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Aluno
  */
-public class FilmeComboModel extends DefaultComboBoxModel<Filme>{
+public class FilmeComboModel extends DefaultComboBoxModel<Filme> {
+
     public FilmeComboModel(Vector<Filme> items) {
         super(items);
     }
 
     public FilmeComboModel() {
     }
-    
+
     public void setSelectedItem(Filme estilo) {
-        
+
         int numElemCB = getSize();
         for (int i = 0; i < numElemCB; i++) {
             Filme filmeCB = getElementAt(i);
             if (filmeCB.getId() == estilo.getId()) {
                 super.setSelectedItem(filmeCB);
             }
-        }        
+        }
     }
 
-    
-    
     @Override
     public Filme getSelectedItem() {
         return (Filme) super.getSelectedItem();

@@ -17,7 +17,8 @@ import java.util.List;
  *
  * @author Aluno
  */
-public class FilmeDao implements Dao<Integer, Filme>{
+public class FilmeDao implements Dao<Integer, Filme> {
+
     protected Connection con;
 
     public FilmeDao(Connection con) {
@@ -27,7 +28,7 @@ public class FilmeDao implements Dao<Integer, Filme>{
     @Override
     public void create(Filme entity) {
         String sql = "INSERT INTO filme(nome, ano, duracao, foto, sinopse, estilo_id) VALUES (?, ?, ?, ?, ?, ?)";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getNome());
@@ -37,10 +38,10 @@ public class FilmeDao implements Dao<Integer, Filme>{
             query.setString(5, entity.getSinopse());
             query.setInt(3, entity.getEstilo().getId());
             query.executeUpdate();
-            
+
             ResultSet rs = query.getGeneratedKeys();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 int id = rs.getInt("id");
                 entity.setId(id);
             }
@@ -54,12 +55,12 @@ public class FilmeDao implements Dao<Integer, Filme>{
     public Filme retrieve(Integer pk) {
         Filme filme = null;
         String sql = "SELECT * FROM filme WHERE id = ?";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setInt(1, pk);
             ResultSet rs = query.executeQuery();
-            
+
             if (rs.next()) {
                 EstiloDao daoEstilo = new EstiloDao(con);
                 filme = new Filme();
@@ -83,7 +84,7 @@ public class FilmeDao implements Dao<Integer, Filme>{
         String sql = "UPDATE filme SET nome = ?, ano = ?, duracao = ?, foto = ?, sinopse = ?, estilo_id = ? WHERE id = ?";
         try {
             EstiloDao daoEstilo = new EstiloDao(con);
-            if(entity.getEstilo().getId() <= 0){
+            if (entity.getEstilo().getId() <= 0) {
                 daoEstilo.create(entity.getEstilo());
             }
             PreparedStatement query = con.prepareStatement(sql);
@@ -116,12 +117,12 @@ public class FilmeDao implements Dao<Integer, Filme>{
     @Override
     public List<Filme> findAll() {
         List<Filme> filmes = new LinkedList<Filme>();
-        
+
         try {
             String sql = "SELECT * FROM filme";
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
-            
+
             while (rs.next()) {
                 EstiloDao daoEstilo = new EstiloDao(con);
                 Filme filme = new Filme();
@@ -132,7 +133,7 @@ public class FilmeDao implements Dao<Integer, Filme>{
                 filme.setFoto(rs.getString("foto"));
                 filme.setSinopse(rs.getString("sinopse"));
                 filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id")));
-                
+
                 filmes.add(filme);
             }
         } catch (SQLException e) {
@@ -140,5 +141,5 @@ public class FilmeDao implements Dao<Integer, Filme>{
         }
         return filmes;
     }
-    
+
 }

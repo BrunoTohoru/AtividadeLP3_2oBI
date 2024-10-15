@@ -18,9 +18,11 @@ import javax.swing.JOptionPane;
  * @author Aluno
  */
 public class EstiloCadastrar extends javax.swing.JFrame {
+
     private Connection con = ConnectionFactory.createConnectionToMySQL();
     private EstiloTableModel tbm;
     private Estilo estiloSelecionado = null;
+
     /**
      * Creates new form EstiloCadastrar
      */
@@ -28,9 +30,9 @@ public class EstiloCadastrar extends javax.swing.JFrame {
         initComponents();
         tbm = new EstiloTableModel();
         tblEstilo.setModel(tbm);
-        
+
         popula();
-        
+
         tblEstilo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -40,16 +42,17 @@ public class EstiloCadastrar extends javax.swing.JFrame {
             }
         });
     }
+
     private void popula() {
         EstiloDao dao = new EstiloDao(con);
         tbm.addList(dao.findAll());
     }
-    
-    private void populaForm(Estilo estilo){
+
+    private void populaForm(Estilo estilo) {
         tfID.setText(String.valueOf(estilo.getId()));
         tfNome.setText(estilo.getNome());
     }
-    
+
     private void limpaTela() {
         tfID.setText("");
         tfNome.setText("");
@@ -165,22 +168,22 @@ public class EstiloCadastrar extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         Estilo estilo = new Estilo();
-        estilo.setNome(tfNome.getText());        
+        estilo.setNome(tfNome.getText());
         EstiloDao dao = new EstiloDao(con);
         dao.create(estilo);
-        
+
         tbm.add(estilo);
         tbm.fireTableDataChanged();
-        
+
         limpaTela();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (estiloSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Selecione um estilo na tabela.");
-        }else{
+        } else {
             estiloSelecionado.setNome(tfNome.getText());
-   
+
             EstiloDao dao = new EstiloDao(con);
             dao.update(estiloSelecionado);
             tbm.fireTableDataChanged();

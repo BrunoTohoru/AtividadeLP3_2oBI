@@ -17,7 +17,8 @@ import java.util.List;
  *
  * @author Aluno
  */
-public class EstiloDao implements Dao<Integer, Estilo>{
+public class EstiloDao implements Dao<Integer, Estilo> {
+
     protected Connection con;
 
     public EstiloDao(Connection con) {
@@ -31,14 +32,14 @@ public class EstiloDao implements Dao<Integer, Estilo>{
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getNome());
             query.executeUpdate();
-            
+
             ResultSet rs = query.getGeneratedKeys();
-            
+
             if (rs.next()) {
                 int id = rs.getInt(1);
                 entity.setId(id);
             }
-            
+
             query.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -65,14 +66,14 @@ public class EstiloDao implements Dao<Integer, Estilo>{
                 System.out.println(e.getMessage());
             }
         }
-        
+
         return estilo;
     }
 
     @Override
     public void update(Estilo entity) {
         String sql = "UPDATE estilo SET nome = ? WHERE id = ?";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getNome());
@@ -87,7 +88,7 @@ public class EstiloDao implements Dao<Integer, Estilo>{
     @Override
     public void delete(Integer pk) {
         String sql = "DELETE FROM estilo WHERE id = ?";
-        
+
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setInt(1, pk);
@@ -104,8 +105,8 @@ public class EstiloDao implements Dao<Integer, Estilo>{
         try {
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 Estilo estilo = new Estilo();
                 estilo.setId(rs.getInt("id"));
                 estilo.setNome(rs.getString("nome"));
@@ -116,5 +117,5 @@ public class EstiloDao implements Dao<Integer, Estilo>{
         }
         return estilos;
     }
-    
+
 }

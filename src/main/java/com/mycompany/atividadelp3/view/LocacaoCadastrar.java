@@ -5,24 +5,84 @@
 package com.mycompany.atividadelp3.view;
 
 import com.mycompany.atividadelp3.bean.Locacao;
+import com.mycompany.atividadelp3.dao.ClienteDao;
+import com.mycompany.atividadelp3.dao.FilmeDao;
+import com.mycompany.atividadelp3.dao.LocacaoDao;
+import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.ClienteComboModel;
 import com.mycompany.atividadelp3.view.model.FilmeComboModel;
 import com.mycompany.atividadelp3.view.model.LocacaoTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Aluno
  */
 public class LocacaoCadastrar extends javax.swing.JFrame {
+
+    private Connection con = ConnectionFactory.createConnectionToMySQL();
     private LocacaoTableModel tbm;
     private FilmeComboModel cbmFilme;
     private ClienteComboModel cbmCliente;
     private Locacao locacaoSelecionado = null;
+
     /**
      * Creates new form LocacaoCadastrar
      */
     public LocacaoCadastrar() {
         initComponents();
+        tbm = new LocacaoTableModel();
+        tblLocacao.setModel(tbm);
+        cbmFilme = new FilmeComboModel();
+        cbFilme.setModel(cbmFilme);
+        cbmCliente = new ClienteComboModel();
+        cbCliente.setModel(cbmCliente);
+        popula();
+        tblLocacao.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = tblLocacao.getSelectedRow();
+                locacaoSelecionado = tbm.get(linha);
+                populaForm(locacaoSelecionado);
+            }
+
+        });
+    }
+
+    private void populaForm(Locacao locacao) {
+        tfID.setText(String.valueOf(locacao.getId()));
+        tfValor.setText(locacao.getValor().toString());
+        cbmCliente.setSelectedItem(locacao.getCliente());
+        cbmFilme.setSelectedItem(locacao.getFilme());
+        ftfDevolucao.setText(locacao.getDevolucao().toString());
+        ftfEmissao.setText(locacao.getEmissao().toString());
+    }
+
+    private void popula() {
+        LocacaoDao dao = new LocacaoDao(con);
+        tbm.addList(dao.findAll());
+        FilmeDao daoFilme = new FilmeDao(con);
+        cbmFilme.addList(daoFilme.findAll());
+        ClienteDao daoCliente = new ClienteDao(con);
+        cbmCliente.addList(daoCliente.findAll());
+
+    }
+
+    private void limpaTela() {
+        tfID.setText("");
+        tfValor.setText("");
+        ftfDevolucao.setText("");
+        ftfEmissao.setText("");
+        cbCliente.setSelectedItem(-1);
+        cbFilme.setSelectedItem(-1);
     }
 
     /**
@@ -69,8 +129,18 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
         cbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnAddFilme.setText("...");
+        btnAddFilme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddFilmeActionPerformed(evt);
+            }
+        });
 
         btnAddCliente.setText("...");
+        btnAddCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddClienteActionPerformed(evt);
+            }
+        });
 
         lblEmissao.setText("Emissão");
 
@@ -92,10 +162,25 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblLocacao);
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,6 +266,80 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        Locacao locacao = new Locacao();
+        SimpleDateFormat formatoDevolucao = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat formatoEmissao = new SimpleDateFormat("dd/MM/yy");
+        Date dataDevolucao = null;
+        Date dataEmissao = null;
+        try {
+            dataDevolucao = formatoDevolucao.parse(ftfDevolucao.getText());
+            dataEmissao = formatoEmissao.parse(ftfEmissao.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(LocacaoCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        locacao.setCliente(cbmCliente.getSelectedItem());
+        locacao.setFilme(cbmFilme.getSelectedItem());
+        locacao.setValor(Double.parseDouble(tfValor.getText()));
+        locacao.setDevolucao(dataDevolucao);
+        locacao.setEmissao(dataEmissao);
+
+        LocacaoDao dao = new LocacaoDao(con);
+        dao.create(locacao);
+
+        tbm.add(locacao);
+
+        limpaTela();
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (locacaoSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma locacao na tabela");
+        } else {
+            SimpleDateFormat formatoDevolucao = new SimpleDateFormat("dd/MM/yy");
+            SimpleDateFormat formatoEmissao = new SimpleDateFormat("dd/MM/yy");
+            Date dataDevolucao = null;
+            Date dataEmissao = null;
+            try {
+                dataDevolucao = formatoDevolucao.parse(ftfDevolucao.getText());
+                dataEmissao = formatoEmissao.parse(ftfEmissao.getText());
+            } catch (ParseException ex) {
+                Logger.getLogger(LocacaoCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            locacaoSelecionado.setValor(Double.parseDouble(tfValor.getText()));
+            locacaoSelecionado.setCliente(cbmCliente.getSelectedItem());
+            locacaoSelecionado.setFilme(cbmFilme.getSelectedItem());
+            locacaoSelecionado.setEmissao(dataEmissao);
+            locacaoSelecionado.setDevolucao(dataDevolucao);
+
+            LocacaoDao dao = new LocacaoDao(con);
+            dao.update(locacaoSelecionado);
+            tbm.fireTableDataChanged();
+            limpaTela();
+            locacaoSelecionado = null;
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        locacaoSelecionado = tbm.get(tblLocacao.getSelectedRow());
+        LocacaoDao dao = new LocacaoDao(con);
+        dao.delete(locacaoSelecionado.getId());
+        System.out.println(locacaoSelecionado);
+        tbm.remove(locacaoSelecionado);
+        limpaTela();
+        locacaoSelecionado = null;
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnAddFilmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFilmeActionPerformed
+        FilmeCadastrar telaFilme = new FilmeCadastrar();
+        telaFilme.setVisible(true);
+    }//GEN-LAST:event_btnAddFilmeActionPerformed
+
+    private void btnAddClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddClienteActionPerformed
+        ClienteCadastrar telaCliente = new ClienteCadastrar();
+        telaCliente.setVisible(true);
+    }//GEN-LAST:event_btnAddClienteActionPerformed
 
     /**
      * @param args the command line arguments
