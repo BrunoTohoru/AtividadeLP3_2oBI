@@ -4,6 +4,8 @@
  */
 package com.mycompany.atividadelp3.view;
 
+import com.mycompany.atividadelp3.bean.Cliente;
+import com.mycompany.atividadelp3.bean.Filme;
 import com.mycompany.atividadelp3.bean.Locacao;
 import com.mycompany.atividadelp3.dao.ClienteDao;
 import com.mycompany.atividadelp3.dao.FilmeDao;
@@ -58,21 +60,23 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
     }
 
     private void populaForm(Locacao locacao) {
+        SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yy");
         tfID.setText(String.valueOf(locacao.getId()));
         tfValor.setText(locacao.getValor().toString());
         cbmCliente.setSelectedItem(locacao.getCliente());
         cbmFilme.setSelectedItem(locacao.getFilme());
-        ftfDevolucao.setText(locacao.getDevolucao().toString());
-        ftfEmissao.setText(locacao.getEmissao().toString());
+        ftfDevolucao.setText(formatoData.format(locacao.getDevolucao()));
+        ftfEmissao.setText(formatoData.format(locacao.getEmissao()));
     }
 
     private void popula() {
+        
         LocacaoDao dao = new LocacaoDao(con);
         tbm.addList(dao.findAll());
         FilmeDao daoFilme = new FilmeDao(con);
-        cbmFilme.addList(daoFilme.findAll());
+        cbmFilme.addAll(daoFilme.findAll());
         ClienteDao daoCliente = new ClienteDao(con);
-        cbmCliente.addList(daoCliente.findAll());
+        cbmCliente.addAll(daoCliente.findAll());
 
     }
 
@@ -122,11 +126,7 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
 
         lblFilme.setText("Filme");
 
-        cbFilme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         lblCliente.setText("Cliente");
-
-        cbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnAddFilme.setText("...");
         btnAddFilme.addActionListener(new java.awt.event.ActionListener() {
@@ -269,13 +269,12 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         Locacao locacao = new Locacao();
-        SimpleDateFormat formatoDevolucao = new SimpleDateFormat("dd/MM/yy");
-        SimpleDateFormat formatoEmissao = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yy");
         Date dataDevolucao = null;
         Date dataEmissao = null;
         try {
-            dataDevolucao = formatoDevolucao.parse(ftfDevolucao.getText());
-            dataEmissao = formatoEmissao.parse(ftfEmissao.getText());
+            dataDevolucao = formatoData.parse(ftfDevolucao.getText());
+            dataEmissao = formatoData.parse(ftfEmissao.getText());
         } catch (ParseException ex) {
             Logger.getLogger(LocacaoCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -297,13 +296,12 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
         if (locacaoSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Selecione uma locacao na tabela");
         } else {
-            SimpleDateFormat formatoDevolucao = new SimpleDateFormat("dd/MM/yy");
-            SimpleDateFormat formatoEmissao = new SimpleDateFormat("dd/MM/yy");
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yy");
             Date dataDevolucao = null;
             Date dataEmissao = null;
             try {
-                dataDevolucao = formatoDevolucao.parse(ftfDevolucao.getText());
-                dataEmissao = formatoEmissao.parse(ftfEmissao.getText());
+                dataDevolucao = formatoData.parse(ftfDevolucao.getText());
+                dataEmissao = formatoData.parse(ftfEmissao.getText());
             } catch (ParseException ex) {
                 Logger.getLogger(LocacaoCadastrar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -382,8 +380,8 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JComboBox<String> cbCliente;
-    private javax.swing.JComboBox<String> cbFilme;
+    private javax.swing.JComboBox<Cliente> cbCliente;
+    private javax.swing.JComboBox<Filme> cbFilme;
     private javax.swing.JFormattedTextField ftfDevolucao;
     private javax.swing.JFormattedTextField ftfEmissao;
     private javax.swing.JLabel jLabel1;

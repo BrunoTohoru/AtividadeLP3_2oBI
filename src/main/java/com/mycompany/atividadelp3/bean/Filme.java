@@ -1,12 +1,14 @@
 package com.mycompany.atividadelp3.bean;
 
+import java.io.InputStream;
+
 public class Filme {
 
     private Integer id;
     private String nome;
     private String ano;
     private Integer duracao;
-    private String foto;
+    private InputStream foto;
     private String sinopse;
     private Estilo estilo;
 
@@ -42,11 +44,11 @@ public class Filme {
         this.duracao = duracao;
     }
 
-    public String getFoto() {
+    public InputStream getFoto() {
         return foto;
     }
 
-    public void setFoto(String foto) {
+    public void setFoto(InputStream foto) {
         this.foto = foto;
     }
 
