@@ -36,13 +36,13 @@ public class FilmeDao implements Dao<Integer, Filme> {
             query.setInt(3, entity.getDuracao());
             query.setBinaryStream(4, entity.getFoto());
             query.setString(5, entity.getSinopse());
-            query.setInt(3, entity.getEstilo().getId());
+            query.setInt(6, entity.getEstilo().getId());
             query.executeUpdate();
 
             ResultSet rs = query.getGeneratedKeys();
 
             if (rs.next()) {
-                int id = rs.getInt("id");
+                int id = rs.getInt(1);
                 entity.setId(id);
             }
             query.close();

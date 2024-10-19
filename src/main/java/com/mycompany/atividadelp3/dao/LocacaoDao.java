@@ -42,7 +42,7 @@ public class LocacaoDao implements Dao<Integer, Locacao> {
             ResultSet rs = query.getGeneratedKeys();
 
             if (rs.next()) {
-                int id = rs.getInt("id");
+                int id = rs.getInt(1);
                 entity.setId(id);
             }
             query.close();

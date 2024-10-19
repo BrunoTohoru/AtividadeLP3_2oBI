@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
 public class FilmeTableModel extends AbstractTableModel {
 
     private List<Filme> dados = new LinkedList<Filme>();
-    private String[] colunas = {"ID", "Estilo", "Nome", "Ano", "Duração", "Detalhes"};
+    private String[] colunas = {"ID", "Estilo", "Nome", "Ano", "Duração", "Sinopse"};
 
     public Filme get(int linha) {
         return dados.get(linha);
@@ -67,6 +67,8 @@ public class FilmeTableModel extends AbstractTableModel {
                 return filme.getAno();
             case 4:
                 return filme.getDuracao();
+            case 5:
+                return filme.getSinopse();
             default:
                 return null;
         }
