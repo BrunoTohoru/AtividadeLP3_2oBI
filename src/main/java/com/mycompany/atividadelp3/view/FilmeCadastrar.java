@@ -41,7 +41,6 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private Filme filmeSelecionado = null;
     private String filePath = null;
     private InputStream imagem = null;
-    private ImageIcon imagemIcon = null;
 
     /**
      * Creates new form FilmeCadastrar
@@ -58,7 +57,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int linha = tblFilme.getSelectedRow();
-                filmeSelecionado = tbm.get(linha);
+                filmeSelecionado = tbm.get(linha);               
                 populaForm(filmeSelecionado);
             }
 
@@ -72,8 +71,23 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfDuracao.setText(filme.getDuracao().toString());
         tfFoto.setText(filePath);
         taSinopse.setText(filme.getSinopse());
-        lblShowFoto.setIcon(imagemIcon);
+        desenhaImagem(filme.getFoto());
         cbm.setSelectedItem(filme.getEstilo());
+    }
+    
+    private void desenhaImagem(InputStream foto){
+        
+        try {
+            BufferedImage bufferedImage = ImageIO.read(foto);
+            Image scale = bufferedImage.getScaledInstance(150, 250, 2);
+            ImageIcon imageIcon = new ImageIcon(scale);
+            
+            lblShowFoto.setIcon(imageIcon);
+            lblShowFoto.repaint();
+        } catch (IOException ex) {
+            Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     private void popula() {
@@ -302,13 +316,11 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             FileInputStream fis = new FileInputStream(f);
             try {
                 BufferedImage bufferedImage = ImageIO.read(fis);
-                Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), bufferedImage.TYPE_INT_ARGB);
+                Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), 0);
                 ImageIcon imageIcon = new ImageIcon(scaledImage);
-                
+                imagem = fis;
                 lblShowFoto.setIcon(imageIcon);
                 lblShowFoto.repaint();
-                imagemIcon = imageIcon;
-                imagem = fis;
             } catch (IOException ex) {
                 Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -323,26 +335,22 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProcurarFotoActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        if (imagem != null) {
-            Filme filme = new Filme();
-            filme.setNome(tfNome.getText());
-            filme.setAno(tfAno.getText());
-            filme.setDuracao(Integer.parseInt(tfDuracao.getText()));
-            filme.setFoto(imagem);
-            filme.setSinopse(taSinopse.getText());
-            filme.setEstilo(cbm.getSelectedItem());
+        Filme filme = new Filme();
+        filme.setNome(tfNome.getText());
+        filme.setAno(tfAno.getText());
+        filme.setDuracao(Integer.parseInt(tfDuracao.getText()));
+        filme.setFoto(imagem);
+        filme.setSinopse(taSinopse.getText());
+        filme.setEstilo(cbm.getSelectedItem());
 
-            FilmeDao dao = new FilmeDao(con);
-            dao.create(filme);
+        FilmeDao dao = new FilmeDao(con);
+        dao.create(filme);
 
-            tbm.add(filme);
-            tbm.fireTableDataChanged();
+        tbm.add(filme);
+        tbm.fireTableDataChanged();
 
-            filePath = null;
-            limpaTela();
-        }else{
-            JOptionPane.showMessageDialog(this, "Para cadastrar insira uma imagem");
-        }
+        filePath = null;
+        limpaTela();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed

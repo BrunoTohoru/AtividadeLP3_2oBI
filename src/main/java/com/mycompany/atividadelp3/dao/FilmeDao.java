@@ -94,6 +94,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
             query.setBinaryStream(4, entity.getFoto());
             query.setString(5, entity.getSinopse());
             query.setInt(6, entity.getEstilo().getId());
+            query.setInt(7, entity.getId());
             query.executeUpdate();
             query.close();
         } catch (SQLException e) {
@@ -119,7 +120,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
         List<Filme> filmes = new LinkedList<Filme>();
 
         try {
-            String sql = "SELECT * FROM filme";
+            String sql = "SELECT id, nome, ano, duracao, foto, sinopse, estilo_id FROM filme";
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
 

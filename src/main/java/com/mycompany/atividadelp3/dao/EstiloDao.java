@@ -51,7 +51,7 @@ public class EstiloDao implements Dao<Integer, Estilo> {
         Estilo estilo = null;
         if (pk != null) {
             try {
-                String sql = "SELECT nome FROM estilo WHERE id = ?";
+                String sql = "SELECT id, nome FROM estilo WHERE id = ?";
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);
                 ResultSet rs = query.executeQuery();
