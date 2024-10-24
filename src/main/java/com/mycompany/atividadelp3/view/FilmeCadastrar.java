@@ -60,7 +60,6 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                 int linha = tblFilme.getSelectedRow();
                 filmeSelecionado = tbm.get(linha);
                 populaForm(filmeSelecionado);
-                System.out.println(filmeSelecionado.toString() + "AQUIIII");
             }
 
         });
@@ -143,7 +142,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             }
         });
 
-        lblDuracao.setText("Duração (horas)");
+        lblDuracao.setText("Duração (min)");
 
         lblFoto.setText("Foto");
 
@@ -216,7 +215,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane2))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -242,9 +241,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                         .addComponent(btnProcurarFoto)
                         .addGap(18, 18, 18)
                         .addComponent(lblAno)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                        .addComponent(tfAno, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfAno, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblDuracao)
                         .addGap(1, 1, 1)
                         .addComponent(tfDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -289,13 +288,14 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProcurarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcurarFotoActionPerformed
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.setDialogTitle("Seletor de foto");
-        fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG)", "png", "jpg", "jpeg"));
+        fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG, *JFIF)", "png", "jpg", "jpeg", "jfif"));
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
         try {

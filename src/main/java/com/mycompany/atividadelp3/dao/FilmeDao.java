@@ -70,7 +70,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
                 filme.setDuracao(rs.getInt("duracao"));
                 filme.setFoto(rs.getBinaryStream("foto"));
                 filme.setSinopse(rs.getString("sinopse"));
-                filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id")));
+                filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id"))); //OLHA AQUI DEPOIS
             }
             query.close();
         } catch (SQLException e) {
