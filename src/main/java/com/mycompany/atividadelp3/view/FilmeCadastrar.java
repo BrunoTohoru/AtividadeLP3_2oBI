@@ -11,10 +11,12 @@ import com.mycompany.atividadelp3.dao.FilmeDao;
 import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.EstiloComboModel;
 import com.mycompany.atividadelp3.view.model.FilmeTableModel;
+import com.mysql.cj.util.Base64Decoder;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,6 +43,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private Filme filmeSelecionado = null;
     private String filePath = null;
     private InputStream imagem = null;
+    private File file = null;
 
     /**
      * Creates new form FilmeCadastrar
@@ -71,15 +74,18 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfDuracao.setText(filme.getDuracao().toString());
         tfFoto.setText(filePath);
         taSinopse.setText(filme.getSinopse());
-        desenhaImagem(filme.getFoto());
+        desenhaImagem(file);
         cbm.setSelectedItem(filme.getEstilo());
     }
     
-    private void desenhaImagem(InputStream foto){
-        
+    private void desenhaImagem(File file){
         try {
-            BufferedImage bufferedImage = ImageIO.read(foto);
-            Image scale = bufferedImage.getScaledInstance(150, 250, 2);
+            System.out.println("ERRO 1 " + file);
+            FileInputStream fis = new FileInputStream(file);
+            System.out.println("ERRO 2 " + fis);
+            BufferedImage bufferedImage = ImageIO.read(fis);
+            System.out.println("ERRO 2 " + bufferedImage);
+            Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), 0);
             ImageIcon imageIcon = new ImageIcon(scale);
             
             lblShowFoto.setIcon(imageIcon);
@@ -87,7 +93,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     private void popula() {
@@ -312,6 +318,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG, *JFIF)", "png", "jpg", "jpeg", "jfif"));
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
+        file = f;
         try {
             FileInputStream fis = new FileInputStream(f);
             try {
