@@ -11,12 +11,10 @@ import com.mycompany.atividadelp3.dao.FilmeDao;
 import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.EstiloComboModel;
 import com.mycompany.atividadelp3.view.model.FilmeTableModel;
-import com.mysql.cj.util.Base64Decoder;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -80,12 +78,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     
     private void desenhaImagem(File file){
         try {
-            System.out.println("ERRO 1 " + file);
             FileInputStream fis = new FileInputStream(file);
-            System.out.println("ERRO 2 " + fis);
             BufferedImage bufferedImage = ImageIO.read(fis);
-            System.out.println("ERRO 2 " + bufferedImage);
-            Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), 0);
+            Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scale);
             
             lblShowFoto.setIcon(imageIcon);
@@ -322,6 +317,16 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         try {
             FileInputStream fis = new FileInputStream(f);
             try {
+                /**
+                 * Blob blob = (Blob) rs.getBlob(3);
+                 * byte[] img = blob.getBytes(1, (int) blob.length());
+                 * BufferedImage imagem = null;
+                 * try{
+                 *  imag = ImageIO.read(new ByteArrayInputStream(img));
+                 * }catch(Exception e){
+                 *  System.out.println(e);
+                 * }
+                 */
                 BufferedImage bufferedImage = ImageIO.read(fis);
                 Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), 0);
                 ImageIcon imageIcon = new ImageIcon(scaledImage);

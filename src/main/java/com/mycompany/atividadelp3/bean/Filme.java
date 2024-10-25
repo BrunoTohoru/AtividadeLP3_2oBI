@@ -1,6 +1,6 @@
 package com.mycompany.atividadelp3.bean;
 
-import java.io.InputStream;
+import java.sql.Blob;
 
 public class Filme {
 
@@ -8,7 +8,7 @@ public class Filme {
     private String nome;
     private String ano;
     private Integer duracao;
-    private InputStream foto;
+    private Blob foto;
     private String sinopse;
     private Estilo estilo;
 
@@ -44,11 +44,11 @@ public class Filme {
         this.duracao = duracao;
     }
 
-    public InputStream getFoto() {
+    public Blob getFoto() {
         return foto;
     }
 
-    public void setFoto(InputStream foto) {
+    public void setFoto(Blob foto) {
         this.foto = foto;
     }
 

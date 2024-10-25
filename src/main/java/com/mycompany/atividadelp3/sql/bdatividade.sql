@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS filme (
     nome VARCHAR(100) NOT NULL,
     ano VARCHAR(4) NOT NULL,
     duracao INT NOT NULL DEFAULT 0,
-    foto BLOB NOT NULL,
+    foto LONGBLOB NOT NULL,
     sinopse VARCHAR(500),
     PRIMARY KEY (id),
     FOREIGN KEY (estilo_id) REFERENCES estilo(id)
