@@ -34,7 +34,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
             query.setString(1, entity.getNome());
             query.setString(2, entity.getAno());
             query.setInt(3, entity.getDuracao());
-            query.setBlob(4, entity.getFoto());
+            query.setBlob(4, entity.getFoto(), entity.getTamanhoFoto());
             query.setString(5, entity.getSinopse());
             query.setInt(6, entity.getEstilo().getId());
             query.executeUpdate();
@@ -68,7 +68,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
                 filme.setNome(rs.getString("nome"));
                 filme.setAno(rs.getString("ano"));
                 filme.setDuracao(rs.getInt("duracao"));
-                filme.setFoto(rs.getBlob("foto"));
+                filme.setFoto(rs.getBlob("foto").getBinaryStream());
                 filme.setSinopse(rs.getString("sinopse"));
                 filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id"))); //OLHA AQUI DEPOIS
             }
@@ -91,7 +91,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
             query.setString(1, entity.getNome());
             query.setString(2, entity.getAno());
             query.setInt(3, entity.getDuracao());
-            query.setBlob(4, entity.getFoto());
+            query.setBlob(4, entity.getFoto(), entity.getTamanhoFoto());
             query.setString(5, entity.getSinopse());
             query.setInt(6, entity.getEstilo().getId());
             query.setInt(7, entity.getId());
@@ -131,7 +131,7 @@ public class FilmeDao implements Dao<Integer, Filme> {
                 filme.setNome(rs.getString("nome"));
                 filme.setAno(rs.getString("ano"));
                 filme.setDuracao(rs.getInt("duracao"));
-                filme.setFoto(rs.getBlob("foto"));
+                filme.setFoto(rs.getBlob("foto").getBinaryStream());
                 filme.setSinopse(rs.getString("sinopse"));
                 filme.setEstilo(daoEstilo.retrieve(rs.getInt("estilo_id")));
 

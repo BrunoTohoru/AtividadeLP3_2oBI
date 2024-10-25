@@ -1,6 +1,6 @@
 package com.mycompany.atividadelp3.bean;
 
-import java.sql.Blob;
+import java.io.InputStream;
 
 public class Filme {
 
@@ -8,7 +8,8 @@ public class Filme {
     private String nome;
     private String ano;
     private Integer duracao;
-    private Blob foto;
+    private InputStream foto;
+    private int tamanhoFoto;
     private String sinopse;
     private Estilo estilo;
 
@@ -44,11 +45,11 @@ public class Filme {
         this.duracao = duracao;
     }
 
-    public Blob getFoto() {
+    public InputStream getFoto() {
         return foto;
     }
 
-    public void setFoto(Blob foto) {
+    public void setFoto(InputStream foto) {
         this.foto = foto;
     }
 
@@ -66,6 +67,14 @@ public class Filme {
 
     public void setEstilo(Estilo estilo) {
         this.estilo = estilo;
+    }
+
+    public int getTamanhoFoto() {
+        return tamanhoFoto;
+    }
+
+    public void setTamanhoFoto(int tamanhoFoto) {
+        this.tamanhoFoto = tamanhoFoto;
     }
 
     @Override

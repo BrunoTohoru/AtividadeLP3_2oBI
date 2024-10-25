@@ -15,11 +15,13 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +44,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private String filePath = null;
     private InputStream imagem = null;
     private File file = null;
+    private Integer tamanho = null;
 
     /**
      * Creates new form FilmeCadastrar
@@ -72,19 +75,18 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfDuracao.setText(filme.getDuracao().toString());
         tfFoto.setText(filePath);
         taSinopse.setText(filme.getSinopse());
-        desenhaImagem(file);
+        desenhaImagem(filme.getFoto());
         cbm.setSelectedItem(filme.getEstilo());
     }
     
-    private void desenhaImagem(File file){
+    private void desenhaImagem(InputStream fis){
         try {
-            FileInputStream fis = new FileInputStream(file);
-            BufferedImage bufferedImage = ImageIO.read(fis);
+            BufferedImage bufferedImage = ImageIO.read((InputStream)fis);
             Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scale);
             
             lblShowFoto.setIcon(imageIcon);
-            lblShowFoto.repaint();
+            lblShowFoto.updateUI();
         } catch (IOException ex) {
             Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -314,23 +316,14 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
         file = f;
+        tamanho = (int) fc.getSelectedFile().length();
         try {
             FileInputStream fis = new FileInputStream(f);
+            imagem = fis;
             try {
-                /**
-                 * Blob blob = (Blob) rs.getBlob(3);
-                 * byte[] img = blob.getBytes(1, (int) blob.length());
-                 * BufferedImage imagem = null;
-                 * try{
-                 *  imag = ImageIO.read(new ByteArrayInputStream(img));
-                 * }catch(Exception e){
-                 *  System.out.println(e);
-                 * }
-                 */
                 BufferedImage bufferedImage = ImageIO.read(fis);
-                Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), 0);
+                Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
                 ImageIcon imageIcon = new ImageIcon(scaledImage);
-                imagem = fis;
                 lblShowFoto.setIcon(imageIcon);
                 lblShowFoto.repaint();
             } catch (IOException ex) {
@@ -350,8 +343,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         Filme filme = new Filme();
         filme.setNome(tfNome.getText());
         filme.setAno(tfAno.getText());
-        filme.setDuracao(Integer.parseInt(tfDuracao.getText()));
+        filme.setDuracao(Integer.valueOf(tfDuracao.getText()));
         filme.setFoto(imagem);
+        filme.setTamanhoFoto(tamanho);
         filme.setSinopse(taSinopse.getText());
         filme.setEstilo(cbm.getSelectedItem());
 
@@ -373,8 +367,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             filmeSelecionado.setEstilo(cbm.getSelectedItem());
             filmeSelecionado.setAno(tfAno.getText());
             filmeSelecionado.setSinopse(taSinopse.getText());
-            filmeSelecionado.setDuracao(Integer.parseInt(tfDuracao.getText()));
+            filmeSelecionado.setDuracao(Integer.valueOf(tfDuracao.getText()));
             filmeSelecionado.setFoto(imagem);
+            filmeSelecionado.setTamanhoFoto(tamanho);
 
             FilmeDao dao = new FilmeDao(con);
             dao.update(filmeSelecionado);
